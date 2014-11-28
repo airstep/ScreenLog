@@ -1,0 +1,7 @@
+.gradle
+/keystore.properties
+/local.properties
+/.idea/workspace.xml
+.DS_Store
+/build
+/profile

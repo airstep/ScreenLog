@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Екрапис</string>
+    <string name="app_name_wide">Cтан Перемикань</string>
+    <string name="app_path">.tgsScreenLog</string>
+    <string name="app_history">.history</string>
+    <string name="action_settings">Налаштування</string>
+    <string name="action_stop_service">Зупинити сервiс</string>
+    <string name="action_start_service">Запуск сервiсу</string>
+    <string name="service_was_started">Сервiс запущено.</string>
+    <string name="service_was_stopped">Сервiс був зупинений.</string>
+    <string name="action_clear">Очистити</string>
+    <string name="toggle_screen">Включiть або Виключiть Екран!</string>
+    <string name="history_was_cleared">Iсторiя була очищена.</string>
+    <string name="today">Сьогоднi</string>
+    <string name="time_config_title">Вкажiть лiмiт часу</string>
+    <string name="time_zero_config_title">Лiмiт часу не було назначено. Будь ласка вкажiть Час бiльш нiж Нуль!</string>
+    <string name="total_on">Екран включений:</string>
+    <string name="limit">Лiмiт:</string>
+    <string name="minutes">хвилин</string>
+    <string name="hours_short">г</string>
+    <string name="minutes_short">хв</string>
+    <string name="total_all_on">Всього:</string>
+</resources>

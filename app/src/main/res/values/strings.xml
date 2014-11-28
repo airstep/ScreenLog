@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ScreenLog</string>
+    <string name="app_name_wide">Screen State Logger</string>
+    <string name="app_path">.tgsScreenLog</string>
+    <string name="app_history">.history</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_stop_service">Stop service</string>
+    <string name="action_start_service">Start service</string>
+    <string name="service_was_started">Service is running.</string>
+    <string name="service_was_stopped">Service was stopped.</string>
+    <string name="action_clear">Clear</string>
+    <string name="toggle_screen">Try to toggle screen (on/off)!</string>
+    <string name="history_was_cleared">History was cleared.</string>
+    <string name="today">Today</string>
+    <string name="time_config_title">Specify time limit</string>
+    <string name="time_zero_config_title">Time limit was not set. Please specify Time above Zero!</string>
+    <string name="total_on">Screen is ON:</string>
+    <string name="limit">Limit:</string>
+    <string name="minutes">minutes</string>
+    <string name="hours_short">h</string>
+    <string name="minutes_short">m</string>
+    <string name="total_all_on">Summary:</string>
+</resources>

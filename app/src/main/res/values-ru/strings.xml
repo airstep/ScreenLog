@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Экрапус</string>
+    <string name="app_name_wide">Состояние Переключений</string>
+    <string name="app_path">.tgsScreenLog</string>
+    <string name="app_history">.history</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_stop_service">Остановить сервис</string>
+    <string name="action_start_service">Запуск сервиса</string>
+    <string name="service_was_started">Сервис запущен.</string>
+    <string name="service_was_stopped">Сервис был остановлен.</string>
+    <string name="action_clear">Очистить</string>
+    <string name="toggle_screen">Включите или Выключите Экран!</string>
+    <string name="history_was_cleared">История была очищена.</string>
+    <string name="today">Сегодня</string>
+    <string name="time_config_title">Укажите лимит времени</string>
+    <string name="time_zero_config_title">Лимит времени не был назначен. Пожалуйста укажите Время больше Нуля!</string>
+    <string name="total_on">Экран включен:</string>
+    <string name="limit">Лимит:</string>
+    <string name="minutes">минут</string>
+    <string name="hours_short">ч</string>
+    <string name="minutes_short">м</string>
+    <string name="total_all_on">Всего:</string>
+</resources>
