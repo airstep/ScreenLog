@@ -55,7 +55,16 @@ public class UpdateService extends Service {
             unregisterReceiver(mReceiver);
             mReceiver = null;
         }
+        closeDB();
         super.onDestroy();
+    }
+
+    private void closeDB() {
+        if (dbWriter != null) {
+            dbWriter.close();
+            dbWriter = null;
+        }
+        dbHelper.close();
     }
 
     // db part
