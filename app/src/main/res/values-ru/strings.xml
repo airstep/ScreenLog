@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Экрапус</string>
-    <string name="app_name_wide">Состояние Переключений</string>
+    <string name="app_name_wide">Переключения</string>
     <string name="app_path">.tgsScreenLog</string>
     <string name="app_history">.history</string>
     <string name="action_settings">Настройки</string>
@@ -22,4 +22,5 @@
     <string name="hours_short">ч</string>
     <string name="minutes_short">м</string>
     <string name="total_all_on">Всего:</string>
+    <string name="days">дней</string>
 </resources>

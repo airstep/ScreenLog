@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Екрапис</string>
-    <string name="app_name_wide">Cтан Перемикань</string>
+    <string name="app_name_wide">Перемиканя</string>
     <string name="app_path">.tgsScreenLog</string>
     <string name="app_history">.history</string>
     <string name="action_settings">Налаштування</string>
@@ -22,4 +22,5 @@
     <string name="hours_short">г</string>
     <string name="minutes_short">хв</string>
     <string name="total_all_on">Всього:</string>
+    <string name="days">днiв</string>
 </resources>

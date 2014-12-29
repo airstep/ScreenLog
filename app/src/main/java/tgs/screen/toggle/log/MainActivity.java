@@ -125,12 +125,15 @@ public class MainActivity extends ActionBarActivity {
         long seconds = durationInSeconds % 60;
         int minutes = (int) ((durationInSeconds / 60) % 60);
         int hours = (int) (((durationInSeconds / 60) / 60) % 24);
+        long days = TimeUnit.MILLISECONDS.toDays(duration);
 
         String result = String.format(Locale.getDefault(), "%d:%02d", minutes, seconds);
 
         if (hours > 0)
             result = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds);
 
+        if (days > 0)
+            result = String.format(Locale.getDefault(), "%d %s %d:%02d:%02d", days, getString(R.string.days), hours, minutes, seconds);
         return result;
     }
 

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">ScreenLog</string>
-    <string name="app_name_wide">Screen State Logger</string>
+    <string name="app_name_wide">Screen State</string>
     <string name="app_path">.tgsScreenLog</string>
     <string name="app_history">.history</string>
     <string name="action_settings">Settings</string>
@@ -22,4 +22,5 @@
     <string name="hours_short">h</string>
     <string name="minutes_short">m</string>
     <string name="total_all_on">Summary:</string>
+    <string name="days">days</string>
 </resources>
