@@ -5,11 +5,9 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,22 +21,28 @@ import android.widget.Toast;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import tgs.screen.toggle.log.db.DatabaseHelper;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import tgs.screen.toggle.log.adapter.HistoryAdapter;
+import tgs.screen.toggle.log.model.ScreenState;
+import tgs.screen.toggle.log.service.UpdateService;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private static final String SETTINGS_HOUR = "current_hour_limit";
     private static final String SETTINGS_MINUTE = "current_minute_limit";
-    private DatabaseHelper dbHelper;
-    private SQLiteDatabase dbReader;
     private ArcProgress progress;
     private long mTimeLimit;
     private TextView tvTotalOn;
     private TextView tvTotalAllOn;
     private TextView tvLimit;
+    private Realm db;
+    private HistoryAdapter mAdapter;
     private ListView lv;
 
     @Override
@@ -47,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         mTimeLimit = getTimeLimit();
-        dbHelper = new DatabaseHelper(this);
+        db = Realm.getDefaultInstance();
 
         lv = (ListView) findViewById(R.id.listView);
 
@@ -56,8 +60,11 @@ public class MainActivity extends ActionBarActivity {
         lv.addHeaderView(header, null, false);
         ViewGroup footer = (ViewGroup)inflater.inflate(R.layout.listview_foot_main, lv, false);
         lv.addHeaderView(footer, null, false);
+        mAdapter = new HistoryAdapter(this, R.layout.row_history_item);
+        lv.setAdapter(mAdapter);
 
-        getSupportActionBar().setTitle(R.string.app_name_wide);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(R.string.app_name_wide);
         startService(new Intent(this, UpdateService.class));
         progress = (ArcProgress) header.findViewById(R.id.arc_progress);
         tvTotalOn = (TextView) header.findViewById(R.id.tvTotalON);
@@ -84,7 +91,7 @@ public class MainActivity extends ActionBarActivity {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putInt(SETTINGS_HOUR, hourOfDay);
                     editor.putInt(SETTINGS_MINUTE, minute);
-                    editor.commit();
+                    editor.apply();
                     mTimeLimit = calculateLimit(hourOfDay, minute);
                     tvLimit.setText(toHumanStringDurationLimit(mTimeLimit));
                     updatePercent();
@@ -149,38 +156,30 @@ public class MainActivity extends ActionBarActivity {
         updateAllTime();
     }
 
-    private long getMidnight() {
+    private Date getMidnight() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND,0);
-        return cal.getTimeInMillis();
+        return cal.getTime();
     }
 
     private void updatePercent() {
-        Cursor cursor = dbReader.rawQuery(String.format("SELECT SUM(%s) FROM %s WHERE %s > %s",
-                DatabaseHelper.COLUMN_DIFF_ON, DatabaseHelper.TABLE_SCREEN_STATES,
-                DatabaseHelper.COLUMN_DATE, getMidnight()), null);
+        long total = db.where(ScreenState.class).greaterThan("date", getMidnight())
+                .sum("diffOn").longValue();
 
-        if (cursor.moveToFirst()) {
-            long total = cursor.getLong(0);
-            tvTotalOn.setText(toHumanStringDuration(total));
+        tvTotalOn.setText(toHumanStringDuration(total));
 
-            int percent = Math.round((total / (float) mTimeLimit) * 100);
-            progress.setMax(((percent / 100) == 0) ? 100 : (percent / 100 + 1) * 100);
-            progress.setProgress(percent);
-            setProgressColor(percent);
-        }
+        int percent = Math.round((total / (float) mTimeLimit) * 100);
+        progress.setMax(((percent / 100) == 0) ? 100 : (percent / 100 + 1) * 100);
+        progress.setProgress(percent);
+        setProgressColor(percent);
     }
 
     private void updateAllTime() {
-        Cursor cursor = dbReader.rawQuery(String.format("SELECT SUM(%s) FROM %s",
-                DatabaseHelper.COLUMN_DIFF_ON, DatabaseHelper.TABLE_SCREEN_STATES), null);
-        if(cursor.moveToFirst()) {
-            long total = cursor.getLong(0);
-            tvTotalAllOn.setText(toHumanStringDuration(total));
-        }
+        long total = db.where(ScreenState.class).sum("diffOn").longValue();
+        tvTotalAllOn.setText(toHumanStringDuration(total));
     }
 
     private void setProgressColor(int percent) {
@@ -194,19 +193,19 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateHistory() {
-        dbReader = dbHelper.getReadableDatabase();
+        RealmResults<ScreenState> historyItems = db.where(ScreenState.class)
+                .greaterThan("date", getMidnight())
+                .findAllSorted("date", Sort.DESCENDING);
 
-        ListView lv = (ListView) findViewById(R.id.listView);
+        if (mAdapter != null)
+            mAdapter.clear();
 
-        Cursor cursor = dbReader.rawQuery(String.format("SELECT * FROM %s WHERE %s > %s ORDER BY %s DESC",
-                DatabaseHelper.TABLE_SCREEN_STATES,
-                DatabaseHelper.COLUMN_DATE,
-                getMidnight(),
-                DatabaseHelper.COLUMN_DATE), null);
-
-        if (cursor.getCount() == 0) showMessage(R.string.toggle_screen);
-        HistoryAdapter adapter = new HistoryAdapter(this, cursor, false);
-        lv.setAdapter(adapter);
+        if (historyItems.size() == 0) {
+            showMessage(R.string.toggle_screen);
+        } else {
+            for (ScreenState item : historyItems)
+                mAdapter.add(item);
+        }
     }
 
     @Override
@@ -253,10 +252,10 @@ public class MainActivity extends ActionBarActivity {
         }
 
         if (id == R.id.action_clear) {
-            closeDB();
-            deleteDatabase(DatabaseHelper.DATABASE_NAME);
+            db.beginTransaction();
+            db.delete(ScreenState.class);
+            db.commitTransaction();
             showMessage(R.string.history_was_cleared);
-            dbHelper = new DatabaseHelper(this);
             updateHistory();
             updatePercent();
             updateAllTime();
@@ -265,17 +264,9 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void closeDB() {
-        if (dbReader != null) {
-            dbReader.close();
-            dbReader = null;
-        }
-        dbHelper.close();
-    }
-
     @Override
     protected void onDestroy() {
-        closeDB();
+        db.close();
         super.onDestroy();
     }
 

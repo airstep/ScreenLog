@@ -1,8 +1,10 @@
-package tgs.screen.toggle.log;
+package tgs.screen.toggle.log.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import tgs.screen.toggle.log.service.UpdateService;
 
 public class BootReceiver extends BroadcastReceiver {
     Context mContext;

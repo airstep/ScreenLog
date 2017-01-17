@@ -10,10 +10,12 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:name=".ScreenLogApplication"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:logo="@drawable/toggle"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +25,7 @@
         </activity>
 
         <service
-            android:name="tgs.screen.toggle.log.UpdateService"
+            android:name="tgs.screen.toggle.log.service.UpdateService"
             android:enabled="true"
             android:exported="true" >
             <intent-filter>
@@ -31,7 +33,7 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="tgs.screen.toggle.log.ScreenReceiver" >
+        <receiver android:name="tgs.screen.toggle.log.receiver.ScreenReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_ON" />
             </intent-filter>
@@ -40,7 +42,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:enabled="true" android:name="tgs.screen.toggle.log.BootReceiver"
+        <receiver android:enabled="true" android:name="tgs.screen.toggle.log.receiver.BootReceiver"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
 
             <intent-filter>

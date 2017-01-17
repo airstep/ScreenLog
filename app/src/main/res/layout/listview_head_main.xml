@@ -13,7 +13,7 @@
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
         custom:arc_bottom_text="@string/today"
-        custom:arc_bottom_text_size="32px"
+        custom:arc_bottom_text_size="20sp"
         custom:arc_finished_color="@color/progress_green"
         custom:arc_unfinished_color="#cccccc" />
 
